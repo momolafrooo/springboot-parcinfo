@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sn.isi.parcinfo.dto.IngenieurDto;
 import sn.isi.parcinfo.exception.EntityNotFoundException;
 import sn.isi.parcinfo.exception.RequestException;
@@ -23,6 +24,7 @@ public class IngenieurServiceImpl implements IIngenieurService{
     private IngenieurRepository ingenieurRepository;
     private MessageSource messageSource;
 
+    @Transactional
     @Override
     public IngenieurDto create(IngenieurDto ingenieurDto) {
         ingenieurRepository.findByEmail(ingenieurDto.getEmail())
@@ -33,6 +35,7 @@ public class IngenieurServiceImpl implements IIngenieurService{
         return ingenieurMapper.fromIngenieur(ingenieurRepository.save(ingenieurMapper.toIngenieur(ingenieurDto)));
     }
 
+    @Transactional
     @Override
     public IngenieurDto update(int id, IngenieurDto ingenieurDto) {
 
@@ -45,6 +48,7 @@ public class IngenieurServiceImpl implements IIngenieurService{
                         Locale.getDefault())));
     }
 
+    @Transactional
     @Override
     public void remove(int id) {
         try {
@@ -56,6 +60,7 @@ public class IngenieurServiceImpl implements IIngenieurService{
         }
     }
 
+    @Transactional(readOnly = true)
     @Override
     public IngenieurDto get(int id) {
         return ingenieurMapper.fromIngenieur(ingenieurRepository.findById(id).orElseThrow(() ->
@@ -63,6 +68,7 @@ public class IngenieurServiceImpl implements IIngenieurService{
                         Locale.getDefault()))));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<IngenieurDto> getAll() {
         return StreamSupport.stream(ingenieurRepository.findAll().spliterator(), false)
